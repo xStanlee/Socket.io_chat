@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>{{title}}</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" type="text/css" href="static/main.css">
+
+<link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+<script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+<!--===============================================================================================-->
+</head>
+<body>
+	<div class="bg-video">
+		<video class="bg-video__item" preload="auto" autoplay="true" muted loop="loop" volume="0">
+			<source src="static/video.webm" type="video/webm">
+			<source src="static/video.mp4" type="video/mp4">
+			Your browser is not supported!
+		</video>
+	</div>
+	<div class="container">
+        <div class="container__box"></div>
+        <section class="container__messages">
+            <ul class="container__messages-block">
+				<li class="container__mesages-item">Ciekawe co dzisiaj na zajęciach</li>
+				<li class="container__mesages-item">Nie wiem lol</li>
+				<li class="container__mesages-item">Socket IO</li>
+				<li class="container__mesages-item">Nie wiem co to takiego</li>
+				<li class="container__mesages-item">Trzeba sprawdzić na guglu</li>
+				<li class="container__mesages-item">no to myk + do tego jakiś scroll by się przydał i zachowanie w local storage na dzień i cleanup</li>
+			</ul>
+        </section>
+        <div class="container__users">
+			<ul class="container__users-block">
+				<li class="container__users-item">Kil</li>
+				<li class="container__users-item">Bil</li>
+				<li class="container__users-item">Mil</li>
+				<li class="container__users-item">Sil</li>
+				<li class="container__users-item">Zil</li>
+				<li class="container__users-item">Syr</li>
+			</ul>
+        </div>
+        <div class="container__textarea">
+			<textarea name="" id="container__textarea" cols="40" rows="5"></textarea>
+			<button class="container__textarea-btn">Wyślij</button>
+		</div>
+    </div>
+
+</body>
+</html>
