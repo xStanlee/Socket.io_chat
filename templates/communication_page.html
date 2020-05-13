@@ -1,25 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<title>{{title}}</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-<!--===============================================================================================-->
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<link rel="stylesheet" type="text/css" href="static/main.css">
+{% extends "base.html" %}
 
-<link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
-<script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
-<!--===============================================================================================-->
-</head>
-<body>
-	<div class="bg-video">
-		<video class="bg-video__item" preload="auto" autoplay="true" muted loop="loop" volume="0">
-			<source src="static/video.webm" type="video/webm">
-			<source src="static/video.mp4" type="video/mp4">
-			Your browser is not supported!
-		</video>
-	</div>
+{% block content %}
 	<div class="container">
         <div class="container__box"></div>
         <section class="container__messages">
@@ -47,6 +28,4 @@
 			<button class="container__textarea-btn">Wyślij</button>
 		</div>
     </div>
-
-</body>
-</html>
+{% endblock %}
