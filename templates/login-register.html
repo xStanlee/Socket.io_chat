@@ -10,11 +10,11 @@
 					<form action="{{ url_for('login') }}" method="POST" name="login">
 						<div class="group">
 							<label for="user" class="label">Username</label>
-							<input id="user" type="text" name="username-login" class="input">
+							<input id="user" type="text" name="username-login" class="input" required minlength="3" maxlength="20">
 						</div>
 						<div class="group">
 							<label for="pass" class="label">Password</label>
-							<input id="pass" type="password" name="password-login" class="input" data-type="password">
+							<input id="pass" type="password" name="password-login" class="input" data-type="password" required minlength="6" maxlength="50">
 						</div>
 						<div class="group">
 							<input id="check" type="checkbox" class="check" checked>
@@ -33,19 +33,19 @@
 					<div class="sign-up-htm">
 						<div class="group">
 							<label for="user" class="label">Username</label>
-							<input id="user" name="username-register" type="text" class="input">
+							<input id="user" name="username-register" type="text" class="input" required minlength="3" maxlength="20">
 						</div>
 						<div class="group">
 							<label for="pass" class="label">Password</label>
-							<input id="pass" name="password-register" type="password" class="input" data-type="password">
+							<input id="pass" name="password-register" type="password" class="input" data-type="password" required minlength="6" maxlength="50">
 						</div>
 						<div class="group">
 							<label for="pass" class="label">Repeat Password</label>
-							<input id="pass" name="password-register-2" type="password" class="input" data-type="password">
+							<input id="pass" name="password-register-2" type="password" class="input" data-type="password" required minlength="6" maxlength="50">
 						</div>
 						<div class="group">
 							<label for="pass" class="label">Email Address</label>
-							<input id="pass" name="email-register" type="text" class="input">
+							<input id="pass" name="email-register" type="email" class="input" required minlength="6" maxlength="50">
 						</div>
 						<div class="group">
 							<input type="submit" name="sign_up" class="button" value="Sign Up">
@@ -59,4 +59,7 @@
 			</div>
 		</div>
 	</div>
+	{% if popup_string %}
+	<script> alert(`{{ popup_string }}`); </script>
+	{% endif %}
 {% endblock %}
