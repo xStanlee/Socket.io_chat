@@ -1,16 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 	<div class="container">
         <div class="container__box"></div>
         <section class="container__messages">
             <ul class="container__messages-block">
-				<li class="container__mesages-item">Ciekawe co dzisiaj na zajęciach</li>
+
+			<!--	<li class="container__mesages-item">Ciekawe co dzisiaj na zajęciach</li>
 				<li class="container__mesages-item">Nie wiem lol</li>
 				<li class="container__mesages-item">Socket IO</li>
 				<li class="container__mesages-item">Nie wiem co to takiego</li>
 				<li class="container__mesages-item">Trzeba sprawdzić na guglu</li>
 				<li class="container__mesages-item">no to myk + do tego jakiś scroll by się przydał i zachowanie w local storage na dzień i cleanup</li>
+			-->
 			</ul>
         </section>
         <div class="container__users">
