@@ -60,6 +60,6 @@
 		</div>
 	</div>
 	{% if popup_string %}
-	<script> alert(`{{ popup_string }}`); </script>
+	<script> swal("Check logs!", `{{ popup_string }}`, "error"); </script>
 	{% endif %}
 {% endblock %}

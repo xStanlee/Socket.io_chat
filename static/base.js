@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Connect to  websockets
     // var because of the value of scope
-    var socket = io.connect(location.protocol + '//' +                          // HTTP or HTTPS mostly protocols
+    socket = io.connect(location.protocol + '//' +                              // HTTP or HTTPS mostly protocols
                             document.domain + ':' +                             // Name of our domain
                             location.port);                                     // Our currently port what we worked on
 
@@ -13,12 +13,13 @@ document.addEventListener('DOMContentLoaded', () => {
         btn_send.onclick = () => {                                              // Onclick emit a message to flask from textarea
             const user_message = text_from_area.value;
             socket.emit('submit message', {'user_message': user_message});
+            console.log(user_message);
         };
     });
 
     socket.on('post message', data => {                                         // Get a processed(annouced) data from socket.io and render it on page
         const li = document.createElement('li');
-        li.insertAdjacentHTML("afterbegin", `${data.value}`);                   // Insert text to li element
-        document.getElementsByClassName('container__messages-block').append(li);
+        li.innerHTML = `${data.user_message}`;                                  // Insert text to li element
+        document.querySelector('.container__messages-block').append(li);
     });
 });

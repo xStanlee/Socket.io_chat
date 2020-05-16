@@ -58,6 +58,8 @@ def index():
     else:
         return redirect(url_for('register'))
 
+#################### MAIN PAGE LOGIN-login ######################
+
 @app.route('/login', methods=['POST'])
 def login():
     username = request.form['username-login']
@@ -79,7 +81,7 @@ def login():
                 session["user"] = username
                 return redirect(url_for('communicator'))
             else:
-                popup_string = f"Username - {username} not existing in database. Please swtich to Sign up and create accont or check you spelled that correctly."
+                popup_string = f"Username - {username} not exist in database or password not match. Please swtich to Sign up and create accont or check your logs again."
                 return render_template('login-register.html', popup_string=popup_string)
 
 @app.route('/register', methods=['POST'])
@@ -138,3 +140,6 @@ def communicator():
 def vote(data):
     user_message = data["user_message"]
     emit("post message", {"user_message": user_message}, broadcast=True)
+
+if __name__ == "__main__":
+    socketio.run(app)

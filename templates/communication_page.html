@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 	<div class="container">
         <div class="container__box"></div>
         <section class="container__messages">
@@ -30,5 +29,6 @@
 			<textarea name="" id="container__textarea" cols="40" rows="5"></textarea>
 			<button class="container__textarea-btn">Wyślij</button>
 		</div>
-    </div>
+	</div>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
 {% endblock %}
