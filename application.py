@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 
 from flask import (
@@ -49,8 +50,8 @@ db = scoped_session(sessionmaker(bind=engine))
 def index():
     if request.method == 'GET':
         if 'user' in session:
-            #username = 'Kot_Mieczyslaw'#session['user']
-            return redirect(url_for('communicator'))#username=username))
+            username = session['user']
+            return redirect(url_for('communicator', username=username))
         else:
             return render_template('login-register.html', title="Log in")
     elif request.method == 'POST' and request.form == ['register']:
@@ -72,7 +73,7 @@ def login():
     for user in user_data:
         if user.username == username and user.password == password:
             session["user"] = username
-            return redirect(url_for('communicator'))
+            return redirect(url_for('communicator', username=username))
             break
         elif user.id != None and int(user.id) < int(last_id):
             continue
@@ -127,19 +128,21 @@ def register():
         return render_template('login-register.html', popup_string=popup_string)
 
 #################### MAIN PAGE OF COMMUNICATION ######################
-
-@app.route('/communicator', methods=["GET", "POST"])
-def communicator():
+@app.route('/communicator/<username>', methods=["GET", "POST"])
+def communicator(username):
     if request.method == "GET" or request.method == "POST":
         session_user = session["user"]
         return render_template('communication_page.html', session_user=session_user)
 
-#################### Socket.io for FLASK micro-framework #############
+#################### Socket.io for FLASK micro-framework ##############
 
 @socketio.on('submit message')
-def vote(data):
+def mess(data):
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
     user_message = data["user_message"]
-    emit("post message", {"user_message": user_message}, broadcast=True)
+    username = session["user"]
+    emit("post message", {"user_message": user_message, "current_time": current_time, "username": username}, broadcast=True)
 
 if __name__ == "__main__":
     socketio.run(app)
