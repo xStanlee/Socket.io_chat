@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="communicator__background">
+	<img src="/static/poke_fuckingdexLyrics-coolLogo-mixedCammelAdnotationWTF.png" alt="Logo_pokedex" class="communicator__logo">
 	<div class="container">
         <div class="container__box"></div>
         <section class="container__messages">
             <ul class="container__messages-block">
-
 			<!--	<li class="container__mesages-item">Ciekawe co dzisiaj na zajęciach</li>
 				<li class="container__mesages-item">Nie wiem lol</li>
 				<li class="container__mesages-item">Socket IO</li>
@@ -18,17 +19,15 @@
         <div class="container__users">
 			<ul class="container__users-block">
 				<li class="container__users-item">{{ session_user }}</li>
-				<li class="container__users-item">Bil</li>
-				<li class="container__users-item">Mil</li>
-				<li class="container__users-item">Sil</li>
-				<li class="container__users-item">Zil</li>
-				<li class="container__users-item">Syr</li>
+				<li class="container__users-item">Billy Test</li>
+				<li class="container__users-item">Andrzej Sprawdź</li>
 			</ul>
         </div>
         <div class="container__textarea">
-			<textarea name="" id="container__textarea" cols="40" rows="5"></textarea>
-			<button class="container__textarea-btn">Wyślij</button>
+			<textarea name="textarea" id="container__textarea" cols="40" rows="6" placeholder="Send message..."></textarea>
+			<button class="container__textarea-btn" value="Clear" onclick="eraseText();">Send!</button>
 		</div>
 	</div>
+</div>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
 {% endblock %}

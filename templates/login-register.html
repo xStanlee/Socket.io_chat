@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
+	<div class="bg-video">
+		<video class="bg-video__item" preload="auto" autoplay="true" muted loop="loop" volume="0">
+			<source src="static/video.webm" type="video/webm">
+			<source src="static/video.mp4" type="video/mp4">
+			Your browser is not supported!
+		</video>
+	</div>
 	<div class="login-wrap">
 		<div class="login-html">
 			<input id="tab-1" type="radio" name="tab" class="sign-in" checked="true"><label for="tab-1" class="tab">Sign In</label>

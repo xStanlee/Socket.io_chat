@@ -6,6 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"> 
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
 <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.ico') }}"/>
 <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
@@ -20,13 +21,6 @@
 <!--===============================================================================================-->
 </head>
 <body>
-	<div class="bg-video">
-		<video class="bg-video__item" preload="auto" autoplay="true" muted loop="loop" volume="0">
-			<source src="static/video.webm" type="video/webm">
-			<source src="static/video.mp4" type="video/mp4">
-			Your browser is not supported!
-		</video>
-	</div>
 	{% block content %}
 	{% endblock %}
 </body>

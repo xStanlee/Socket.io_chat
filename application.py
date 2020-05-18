@@ -20,7 +20,8 @@ from sqlalchemy.orm import (
 from flask_session import Session
 from flask_socketio import (
     SocketIO,
-    emit
+    emit,
+    send
 )
 
 from models import *
@@ -82,7 +83,7 @@ def login():
                 session["user"] = username
                 return redirect(url_for('communicator'))
             else:
-                popup_string = f"Username - {username} not exist in database or password not match. Please swtich to Sign up and create accont or check your logs again."
+                popup_string = f"Username - {username} not exist in database or password not match.\\n Please swtich to Sign up and create accont or check your logs again."
                 return render_template('login-register.html', popup_string=popup_string)
 
 @app.route('/register', methods=['POST'])
@@ -135,6 +136,10 @@ def communicator(username):
         return render_template('communication_page.html', session_user=session_user)
 
 #################### Socket.io for FLASK micro-framework ##############
+#@socketio.on('connect')
+#def pass_user(message):
+    #name = session["user"]
+    #send('message', {"name": name}, broadcast=True)
 
 @socketio.on('submit message')
 def mess(data):
