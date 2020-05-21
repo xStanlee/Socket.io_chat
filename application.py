@@ -136,10 +136,10 @@ def communicator(username):
         return render_template('communication_page.html', session_user=session_user)
 
 #################### Socket.io for FLASK micro-framework ##############
-#@socketio.on('connect')
-#def pass_user(message):
-    #name = session["user"]
-    #send('message', {"name": name}, broadcast=True)
+@socketio.on('hello')
+def hello_message(data):
+    name = data["name"]
+    emit("message hello", {"name": name}, broadcast=True)
 
 @socketio.on('submit message')
 def mess(data):
