@@ -22,16 +22,21 @@ document.addEventListener('DOMContentLoaded', () => {
                                                                                 // User has connected to channel
         const url = window.location.pathname;
         const name = url.substring(url.lastIndexOf('/')+1);
-        socket.emit('hello', {'name': name});
 
-         ///////////////////////////////////////////////////////
+        socket.emit('hello user', {
+            'name': name
+        });
+
+        ///////////////////////////////////////////////////////
          ///////////// SEND MESSAGES FUNCTIONS
          ///////////////////////////////////////////////////////
         text_from_area.onkeydown = function(e) {
             if (e.keyCode === 13) {
                 let user_message = text_from_area.value;
                 if (user_message != ''){
-                    socket.emit('submit message', {'user_message': user_message});
+                    socket.emit('submit message', {
+                        'user_message': user_message
+                    });
                     text_from_area.value = ''
                 }else {
                     return;
@@ -42,13 +47,15 @@ document.addEventListener('DOMContentLoaded', () => {
         btn_send.onclick = () => {
             let user_message = text_from_area.value;
             if (user_message != ''){
-            socket.emit('submit message', {'user_message': user_message});
+            socket.emit('submit message', {
+                'user_message': user_message
+            });
             text_from_area.value = '';
         }else{
             return;
         }
     };
-});
+    });
     socket.on('post message', data => {                                         // Get a processed(annouced) data from socket.io and render it on page
         const li = document.createElement('li');
         li.classList.add('container__mesages-item');
@@ -57,12 +64,12 @@ document.addEventListener('DOMContentLoaded', () => {
         //scroll down
         chatMessages.scrollTop = chatMessages.scrollHeight;
     });
-
-    socket.on('message hello', data =>{
+    socket.on('hello response', user => {
         const li = document.createElement('li');
-        li.classList.add('container__mesages-item');
-        li.insertAdjacentElement("beforeend", `***--${data.name} has joined--***`);
+        li.classList.add('container__mesages-item-connected');
+        li.insertAdjacentHTML("afterbegin", `***--${user.name} has connected!--***`)
         chatMessages.append(li);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    })
+         //scroll down
+         chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
 });

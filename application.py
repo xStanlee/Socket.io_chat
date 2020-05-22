@@ -47,6 +47,8 @@ Session(app)
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
+usersOnline = []
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == 'GET':
@@ -74,6 +76,7 @@ def login():
     for user in user_data:
         if user.username == username and user.password == password:
             session["user"] = username
+            usersOnline.append(username)
             return redirect(url_for('communicator', username=username))
             break
         elif user.id != None and int(user.id) < int(last_id):
@@ -81,7 +84,8 @@ def login():
         else:
             if user.id == last_id and (user.username == username and user.password == password):
                 session["user"] = username
-                return redirect(url_for('communicator'))
+                usersOnline.append(username)
+                return redirect(url_for('communicator', username=username))
             else:
                 popup_string = f"Username - {username} not exist in database or password not match.\\n Please swtich to Sign up and create accont or check your logs again."
                 return render_template('login-register.html', popup_string=popup_string)
@@ -117,7 +121,7 @@ def register():
         db.add(add_user)
         db.commit()
         session["user"] = username
-        return redirect(url_for('communicator'))
+        return redirect(url_for('communicator', username=username))
     elif userExists == True and veryficationPass == True:
         popup_string = "Username already exist in database or email is in use."
         return render_template('login-register.html', popup_string=popup_string)
@@ -136,10 +140,10 @@ def communicator(username):
         return render_template('communication_page.html', session_user=session_user)
 
 #################### Socket.io for FLASK micro-framework ##############
-@socketio.on('hello')
-def hello_message(data):
-    name = data["name"]
-    emit("message hello", {"name": name}, broadcast=True)
+@socketio.on('hello user')
+def hello_for_user(json):
+    print ('Recived username: ' + str(json))
+    socketio.emit('hello response', json)
 
 @socketio.on('submit message')
 def mess(data):
