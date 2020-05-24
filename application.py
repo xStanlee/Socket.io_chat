@@ -1,5 +1,8 @@
-from datetime import datetime
+import uuid
 import os
+from random import randint
+from datetime import datetime
+
 
 from flask import (
     Flask,
@@ -21,7 +24,9 @@ from flask_session import Session
 from flask_socketio import (
     SocketIO,
     emit,
-    send
+    send,
+    join_room,
+    leave_room
 )
 
 from models import *
@@ -47,7 +52,7 @@ Session(app)
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
-usersOnline = []
+usersOnline = {}
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -76,7 +81,6 @@ def login():
     for user in user_data:
         if user.username == username and user.password == password:
             session["user"] = username
-            usersOnline.append(username)
             return redirect(url_for('communicator', username=username))
             break
         elif user.id != None and int(user.id) < int(last_id):
@@ -141,9 +145,17 @@ def communicator(username):
 
 #################### Socket.io for FLASK micro-framework ##############
 @socketio.on('hello user')
-def hello_for_user(json):
-    print ('Recived username: ' + str(json))
-    socketio.emit('hello response', json)
+def connected(data):
+    name = data["name"]
+    sessionID = request.sid
+    randomID = str(randint(1, 999999))
+    usersOnline[name] = sessionID
+    #usersOnline.append({name : sessionID})
+    print(f'randomID : {randomID}')
+    socketio.emit('hello response', {"name" : name,
+                                     "sessionID": sessionID,
+                                     "randomID": randomID
+    }) #Default broadcast=True
 
 @socketio.on('submit message')
 def mess(data):
@@ -151,7 +163,10 @@ def mess(data):
     current_time = now.strftime("%H:%M:%S")
     user_message = data["user_message"]
     username = session["user"]
-    emit("post message", {"user_message": user_message, "current_time": current_time, "username": username}, broadcast=True)
+    emit("post message", {"user_message": user_message,
+                          "current_time": current_time,
+                          "username": username
+    }, broadcast=True)
 
 if __name__ == "__main__":
     socketio.run(app)
