@@ -1,6 +1,7 @@
 /* SCROLLBAR STYLED */
 html {
 	--scrollbarBG: #75ABD1;
+	--popupBG: rgb(61, 153, 219);
 	--mainColor-yellow: #c49c48;
 	--thumbBG: #000;
   }
@@ -361,6 +362,7 @@ a{color:inherit;text-decoration:none}
 	height: 80px;
 	margin-left: -43px;
 	will-change: all;
+	transition: all .7s;
 }
 .container__users-item:hover{
 	transition: all 0.7s;
@@ -373,6 +375,62 @@ a{color:inherit;text-decoration:none}
 	height: 95px;
 	margin-left: -43px;
 }
+/*
+		POP-UP
+		/USERS
+					 */
+.container__users-poke{
+	display: flex;
+	flex-direction: column;
+	margin-bottom: -40px;
+	border-radius: 15px;
+	background-color: var(--popupBG);
+	opacity: .7;
+	min-width: 200px;
+	min-height: 60%;
+	z-index: 2;
+	clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 48% 76%, 34% 100%, 33% 77%, 0 76%);
+}
+.container__users-poke-img{
+	align-self: flex-end;
+	width: 15px;
+	height: 15px;
+	margin: 2px 2px 0 0;
+}
+.container__users-poke-input{
+	align-self: center;
+	width: 80%;
+	height: 40%;
+	border: none;
+	font-family: 'Press Start 2P', sans-serif;
+	color: #000;
+	background-color: transparent;
+	box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.3)
+}
+.container__users-poke-btn{
+	align-self: center;
+	margin: 5%;
+	width: 30%;
+	height: 10%;
+	border: none;
+	border-radius: 10px;
+	font-size: 8px;
+	font-family: 'Press Start 2P', sans-serif;
+	color: #000;
+	background-color: rgb(255, 0, 0);
+	box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.3);
+	z-index: 3;
+
+	will-change: all;
+	transition:all 1s;
+}
+.container__users-poke-btn:hover{
+	transform: scale(1.1);
+	background-color: rgb(145, 0, 0);
+	color: #fff;
+	transition:all 1s;
+}
+
 
 .container__textarea{
 	z-index: 2;
@@ -385,7 +443,6 @@ a{color:inherit;text-decoration:none}
 	justify-content: center;
 	align-items: center;
 }
-
 #container__textarea{
 	opacity: 0.9;
 	font-family: 'Press Start 2P', sans-serif;

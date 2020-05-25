@@ -168,5 +168,15 @@ def mess(data):
                           "username": username
     }, broadcast=True)
 
+@socketio.on('poke message', namespace='/private')
+def private_mess(data):
+    recipient_user_id = data["sessionID"]
+    message = data["pokeMessage"]
+    username = data["username"]
+
+    emit("poked", {"message": message,
+                   "username": username
+    }, room=recipient_user_id)
+
 if __name__ == "__main__":
     socketio.run(app)

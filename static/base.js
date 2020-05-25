@@ -94,14 +94,39 @@ document.addEventListener('DOMContentLoaded', () => {
         // Pop-up input
         const individual_user = document.getElementById(userID);
         individual_user.addEventListener('click', () => {
-            console.log("it works!");
-        })
+            const pokeUser = document.createElement('div');
+            pokeUser.setAttribute('id', (user.randomID+0));
+            pokeUser.classList.add('container__users-poke');
+            const eachUser = {
+                spanElement: user.randomID + 1,
+                inputElement: user.randomID + 2,
+                buttonElement: user.randomID + 3
+            };
+            pokeUser.insertAdjacentHTML('beforeend',
+                                        `<image id="${eachUser.spanElement}" src="/static/close.png" class="container__users-poke-img">
+                                         <input id="${eachUser.inputElement}" class="container__users-poke-input" maxlength="40" name="poke-input">
+                                         <button id="${eachUser.buttonElement}" class="container__users-poke-btn">POKE!</button>`);
+            user_li.insertAdjacentElement('beforebegin', pokeUser);
+            // Pop up del();
+            document.getElementById(eachUser.spanElement).addEventListener('click', () => {
+                document.getElementById(user.randomID+0).remove();
+                });
+            // Pop up send poke();
+            document.getElementById(eachUser.buttonElement).addEventListener('click', () => {
+                const pokeMessage = document.getElementById(eachUser.inputElement).value
+                private_socket.emit('poke message', {
+                    'username': user.name,
+                    'sessionID': user.sessionID,
+                    'pokeMessage': pokeMessage
+                });
+            })
          //scroll down
          chatMessages.scrollTop = chatMessages.scrollHeight;
+        });
     });
-////////////////////////////////
-////////////////////////////////
-////////////// Private messages
-
+    
+    private_socket.on('poked',  message => {
+        swal(`${message.username}`, `${message.message}`, "info");
+    })
 });
 
