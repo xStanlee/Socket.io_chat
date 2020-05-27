@@ -172,8 +172,7 @@ def mess(data):
 def private_mess(data):
     recipient_user_id = data["sessionID"]
     message = data["pokeMessage"]
-    username = data["username"]
-
+    username = session["user"]
     emit("poked", {"message": message,
                    "username": username
     }, room=recipient_user_id)
