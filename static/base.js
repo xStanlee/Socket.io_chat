@@ -109,12 +109,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById(eachUser.spanElement).addEventListener('click', () => {
                     document.getElementById(user.randomID+0).remove();
                     });
-                // Pop up send poke();
-                    ['keyup', 'click'].forEach( evt =>
-                        document.getElementById(eachUser.buttonElement).addEventListener(evt, () => {
-                            var key = evt.keyCode || evt.which;
-                            if (key === 13 || evt === 'click'){
-                                const pokeMessage = document.getElementById(eachUser.inputElement).value
+
+                    // Pop up send poke();
+                    ['keydown', 'click'].forEach(evt =>
+                        document.getElementById(eachUser.buttonElement).addEventListener(evt, event => {
+                            if ((evt === 'keydown' && event.key === "Enter") || evt === 'click'){
+                                const pokeMessage = document.getElementById(eachUser.inputElement).value;
                                 private_socket.emit('poke message', {
                                     'username': user.name,
                                     'sessionID': user.sessionID,
@@ -125,22 +125,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             return;
                         }
                     }), false);
-                   /* document.getElementById(eachUser.buttonElement).addEventListener('click', () => {
-                    const pokeMessage = document.getElementById(eachUser.inputElement).value
-                    private_socket.emit('poke message', {
-                        'username': user.name,
-                        'sessionID': user.sessionID,
-                        'pokeMessage': pokeMessage
-                    });
-                    pokeUser.parentNode.removeChild(pokeUser);
-                }); */
-            }else{
-                return;
-            }
+                    }else{
+                        return;
+                    }
          //scroll down
          chatMessages.scrollTop = chatMessages.scrollHeight;
         });
     });
+
     private_socket.on('poked',  message => {
         swal(`${message.username}`, `${message.message}`, "info");
     })

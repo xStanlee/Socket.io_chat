@@ -51,7 +51,16 @@ a{color:inherit;text-decoration:none}
         filter: none;
     }
 }
-
+@keyframes moveInBottom {
+    0% {
+      opacity: 0;
+      transform: translateY(5rem);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(0);
+    }
+  }
 /* video background */
 .bg-video {
     will-change: animation;
@@ -443,6 +452,68 @@ a{color:inherit;text-decoration:none}
 	justify-content: center;
 	align-items: center;
 }
+@media only screen and (max-width: 1024px){
+	.communicator__background{
+		background-image: url('/static/background_midd.png') !important;
+	}
+	.container{
+		background: url('https://media0.giphy.com/media/xmTLS69PcP9fO/giphy.gif?cid=ecf05e475566612df63299906665bb253b349288ca8d527d&rid=giphy.gif') no-repeat bottom 35vh right;
+		background-size: 20% 20%;
+	}
+}
+@media only screen and (min-width:1348px) and (max-width: 1520px){
+	.container{
+		background: url('https://media.giphy.com/media/PhO0CnIMe2Vgh5nVjr/giphy.gif') no-repeat bottom 22vh right;
+		background-size: 25% 25%;
+	}
+	.container__textarea{
+		position: relative;
+		flex-direction: column;
+	}
+	#container__textarea{
+		max-width: 60%;
+		max-height: 40%;
+		font-size: 12px;
+
+		align-self: flex-end;
+		position: absolute;
+		transform: translate(0, -15vh);
+	}
+	.container__textarea-btn{
+		align-self: flex-start;
+		background: transparent;
+
+		display:block;
+		width: 80px;
+		height: 80px;
+		border-radius: 100%;
+		margin-left: 8vw;
+
+		will-change: all;
+		transition: all .3s;
+		animation: moveInBottom 0.5s ease-out 0.75s;
+      	animation-fill-mode: backwards;
+	}
+	.container__textarea-btn:hover{
+		transform: translateY(-0.3rem);
+		box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
+		background-color: #fff;
+		color: #000;
+		transform: scaleX(1.4) scaleY(1.6);
+      	opacity: 0;
+	}
+	.container__textarea-btn:active,
+	.container__textarea-btn:focus{
+		outline: none;
+      	transform: translateY(-0.1rem);
+      	box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+	}
+	.container__messages-block{
+		font-size: 12px;
+		width: 80%;
+		height: 80%;
+	}
+}
 #container__textarea{
 	opacity: 0.9;
 	font-family: 'Press Start 2P', sans-serif;
@@ -465,7 +536,7 @@ a{color:inherit;text-decoration:none}
 	border:none;
 	padding:15px 20px;
 	border-radius:25px;
-	background:rgba(255,255,255,.1);
+	background:rgba(255,255,255,.01);
 	text-transform: uppercase;
 	font-weight: 800;
 	color: black;
