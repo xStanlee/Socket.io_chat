@@ -500,7 +500,7 @@ a{color:inherit;text-decoration:none}
 	margin: 2.5vh 0 0 10vw;
 }
 
-@media only screen and (max-width: 1347px){
+@media only screen and (max-width: 1100px){
 	.communicator__background{
 		background-image: url('/static/background_1024--new.png') !important;
 	}
@@ -576,6 +576,7 @@ a{color:inherit;text-decoration:none}
 	.container__textarea{
 		justify-content: flex-end;
 		align-items: flex-end;
+		grid-column: start-col 1 / -1;
 	}
 	#container__textarea{
 		max-width: 70%;
@@ -584,9 +585,10 @@ a{color:inherit;text-decoration:none}
 		border: none;
 		box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.24);
 
+		align-self: flex-start;
 		order: 3;
 		position: absolute;
-		transform: translate(0, -16vh);
+		transform: translate(0, -17vh);
 	}
 	#container__textarea:placeholder-shown{
 		text-align: center;
@@ -595,8 +597,36 @@ a{color:inherit;text-decoration:none}
 		font-size: 24px;
 	}
 	#container__textarea::placeholder{
-		margin: 0 auto;
+		text-align: center;
 	}
+	.container__textarea-btn{
+		align-self: flex-end;
+		background: rgb(141, 199, 63);
+
+		display:block;
+		width: 100px;
+		height: 100px;
+		border-radius: 50%;
+
+		will-change: all;
+		transition: all .3s;
+		animation: moveInBottom 0.65s ease-out 0.75s;
+		animation-fill-mode: backwards;
+		}
+	.container__textarea-btn:hover{
+		transform: translateY(-0.3rem);
+		box-shadow:  0px 0px 4px 5px rgba(0,0,0,0.75);
+		background-color: rgb(0, 160, 8);
+		color: #000;
+		transform: scaleX(0.85) scaleY(0.85);
+		opacity: 0.8;
+		}
+	.container__textarea-btn:active,
+	.container__textarea-btn:focus{
+		outline: none;
+		transform: translateY(-0.1rem);
+		box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+		}
 }
 @media only screen and (min-width:1348px) and (max-width: 1520px){
 	.container{
@@ -623,7 +653,7 @@ a{color:inherit;text-decoration:none}
 		display:block;
 		width: 80px;
 		height: 80px;
-		border-radius: 100%;
+		border-radius: 50%;
 		margin-left: 8vw;
 
 		will-change: all;

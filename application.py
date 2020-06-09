@@ -150,8 +150,9 @@ def connected(data):
     sessionID = request.sid
     randomID = str(randint(1, 999999))
     usersOnline[name] = sessionID
-    #usersOnline.append({name : sessionID})
-    print(f'randomID : {randomID}')
+    usersOnline.update({name : sessionID})
+
+    print(f'usersOnline : {usersOnline}')
     socketio.emit('hello response', {"name" : name,
                                      "sessionID": sessionID,
                                      "randomID": randomID

@@ -112,8 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // Pop up send poke();
                     ['keydown', 'click'].forEach(evt =>
-                        document.getElementById(eachUser.buttonElement).addEventListener(evt, event => {
-                            if ((evt === 'keydown' && event.key === "Enter") || evt === 'click'){
+                        document
+                        .getElementById(eachUser.buttonElement)
+                        .addEventListener(evt, event => {
+                            if ((evt === 'keyup' && event.keyCode === 13) || evt === 'click'){
                                 const pokeMessage = document.getElementById(eachUser.inputElement).value;
                                 private_socket.emit('poke message', {
                                     'username': user.name,
@@ -135,6 +137,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     private_socket.on('poked',  message => {
         swal(`${message.username}`, `${message.message}`, "info");
-    })
+    });
+
+    socket.on('send users', users  => {
+        console.log(users);
+    });
 });
 
