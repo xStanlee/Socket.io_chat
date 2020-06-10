@@ -11,9 +11,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     ///////////////////////////////////////////////////////
     ///////////// REUSABLE FUNCTIONS ES 5+
+    function jsonCorecter(data){
+        const fixinIt = /'/g;
+        data = this.data.replace(fixinIt, '"');
+        return data;
+    }
 
 
-
+    // Make sure that i parsed an string not object...
+    let json = JSON.stringify(loggedUsers.textContent.trim());
+    console.log(json);
+    //json = jsonCorecter(json);
+    json = json.replace(/'/g, '"');
+    console.log(json);
+    console.log(typeof(json));
+    json = JSON.parse(json);
+    console.log(json);
+    console.log(typeof(json));
+    /*const values = Object.values(obj);
+    console.log(values);*/
     // Connect to  websockets
     var socket = io.connect(location.protocol + '//' +                          // HTTP or HTTPS mostly protocols
                             document.domain + ':' +                             // Name of our domain
@@ -23,6 +39,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                     document.domain + ':' +
                                     location.port + '/' + 'private');           // New socket for priv messages from dif users
 
+
+
+    // Socket events!
      socket.on('connect', () => {
                                                                                 // User has connected to channel
         socket.emit('hello user', {
@@ -143,4 +162,5 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(users);
     });
 });
+
 

@@ -1,5 +1,6 @@
 import uuid
 import os
+import json
 from random import randint
 from datetime import datetime
 
@@ -141,7 +142,7 @@ def register():
 def communicator(username):
     if request.method == "GET" or request.method == "POST":
         session_user = session["user"]
-        return render_template('communication_page.html', session_user=session_user)
+        return render_template('communication_page.html', session_user=session_user, usersOnline=usersOnline)
 
 #################### Socket.io for FLASK micro-framework ##############
 @socketio.on('hello user')
@@ -151,12 +152,13 @@ def connected(data):
     randomID = str(randint(1, 999999))
     usersOnline[name] = sessionID
     usersOnline.update({name : sessionID})
-
-    print(f'usersOnline : {usersOnline}')
     socketio.emit('hello response', {"name" : name,
                                      "sessionID": sessionID,
                                      "randomID": randomID
-    }) #Default broadcast=True
+                                     }
+
+    ) #Default broadcast=True
+
 
 @socketio.on('submit message')
 def mess(data):
