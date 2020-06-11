@@ -18,7 +18,9 @@
         </section>
         <div class="container__users">
 			<ul class="container__users-block">
-				{{ usersOnline }}
+				{% for user in usersOnline2_list %}
+					<li id="{{user.randomID}}">{{user.username}} <br> {{user.sessionID}} <br> AJ DI{{user.randomID}}</li>
+				{% endfor %}
 			</ul>
         </div>
         <div class="container__textarea">

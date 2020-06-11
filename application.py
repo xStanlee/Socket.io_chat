@@ -54,6 +54,8 @@ engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
 usersOnline = {}
+usersOnline2 = {}
+usersOnline2_list = []
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -142,7 +144,7 @@ def register():
 def communicator(username):
     if request.method == "GET" or request.method == "POST":
         session_user = session["user"]
-        return render_template('communication_page.html', session_user=session_user, usersOnline=usersOnline)
+        return render_template('communication_page.html', session_user=session_user, usersOnline2_list=usersOnline2_list)
 
 #################### Socket.io for FLASK micro-framework ##############
 @socketio.on('hello user')
@@ -152,6 +154,14 @@ def connected(data):
     randomID = str(randint(1, 999999))
     usersOnline[name] = sessionID
     usersOnline.update({name : sessionID})
+
+    usersOnline2['username'] = name
+    usersOnline2['sessionID'] = sessionID
+    usersOnline2['randomID'] = randomID
+    usersOnline2_list.append(usersOnline2)
+    print(usersOnline)
+    print(usersOnline2)
+    print(usersOnline2_list)
     socketio.emit('hello response', {"name" : name,
                                      "sessionID": sessionID,
                                      "randomID": randomID

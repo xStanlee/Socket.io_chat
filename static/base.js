@@ -19,17 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // Make sure that i parsed an string not object...
-    let json = JSON.stringify(loggedUsers.textContent.trim());
-    console.log(json);
-    //json = jsonCorecter(json);
-    json = json.replace(/'/g, '"');
-    console.log(json);
-    console.log(typeof(json));
-    json = JSON.parse(json);
-    console.log(json);
-    console.log(typeof(json));
-    /*const values = Object.values(obj);
-    console.log(values);*/
     // Connect to  websockets
     var socket = io.connect(location.protocol + '//' +                          // HTTP or HTTPS mostly protocols
                             document.domain + ':' +                             // Name of our domain
