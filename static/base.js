@@ -12,12 +12,22 @@ document.addEventListener('DOMContentLoaded', () => {
     ///////////////////////////////////////////////////////
     ///////////// REUSABLE FUNCTIONS ES 5+
     function jsonCorecter(data){
-        const fixinIt = /'/g;
-        data = this.data.replace(fixinIt, '"');
+        data = data.replace(/"/g, '`');
+        data = data.replace(/'/g, '"');
+        data = data.replace(/`/g, "'");
         return data;
     }
+    let json = loggedUsers.textContent.trim();
+    json = JSON.parse(jsonCorecter(json));
 
-
+    /*
+    json = json.replace(/"/g, '`');
+    json = json.replace(/'/g, '"');
+    json = json.replace(/`/g, "'");
+    json = JSON.parse(json);
+    */
+    console.log(typeof(json));
+    console.log(json);
     // Make sure that i parsed an string not object...
     // Connect to  websockets
     var socket = io.connect(location.protocol + '//' +                          // HTTP or HTTPS mostly protocols

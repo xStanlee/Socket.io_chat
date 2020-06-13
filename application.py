@@ -158,10 +158,9 @@ def connected(data):
     usersOnline2['username'] = name
     usersOnline2['sessionID'] = sessionID
     usersOnline2['randomID'] = randomID
+
     usersOnline2_list.append(usersOnline2)
-    print(usersOnline)
-    print(usersOnline2)
-    print(usersOnline2_list)
+
     socketio.emit('hello response', {"name" : name,
                                      "sessionID": sessionID,
                                      "randomID": randomID
