@@ -5,31 +5,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const name = url.substring(url.lastIndexOf('/')+1);
 
     const loggedUsers = document.querySelector('.container__users-block');
+    const data_storage = document.querySelector('.data_storage')
     const btn_send = document.querySelector('.container__textarea-btn');
     const chatMessages = document.querySelector('.container__messages-block');
     let text_from_area = document.getElementById('container__textarea');
 
     ///////////////////////////////////////////////////////
     ///////////// REUSABLE FUNCTIONS ES 5+
+
     function jsonCorecter(data){
         data = data.replace(/"/g, '`');
         data = data.replace(/'/g, '"');
         data = data.replace(/`/g, "'");
         return data;
     }
-    let json = loggedUsers.textContent.trim();
-    json = JSON.parse(jsonCorecter(json));
-
-    /*
-    json = json.replace(/"/g, '`');
-    json = json.replace(/'/g, '"');
-    json = json.replace(/`/g, "'");
-    json = JSON.parse(json);
-    */
-    console.log(typeof(json));
-    console.log(json);
-    // Make sure that i parsed an string not object...
+    function randomInt(min, max) {
+        return min + Math.floor((max - min) * Math.random());
+    }
     // Connect to  websockets
+
     var socket = io.connect(location.protocol + '//' +                          // HTTP or HTTPS mostly protocols
                             document.domain + ':' +                             // Name of our domain
                             location.port);                                     // Our currently port what we worked on
@@ -37,8 +31,45 @@ document.addEventListener('DOMContentLoaded', () => {
     var private_socket = io.connect(location.protocol + '//' +
                                     document.domain + ':' +
                                     location.port + '/' + 'private');           // New socket for priv messages from dif users
+    // Render already loggedUsers
 
+    let json = data_storage.textContent.trim();
+    json = JSON.parse(jsonCorecter(json));
+    console.log(typeof(json));
+    console.log(json);
 
+    const entries = Object.entries(json)
+    for(const [username,sessionID] of entries){
+        console.log(`${username} have a session id equal this one === ${sessionID} and their random int will be ${randomInt(1, 99999)}`);
+        const li = document.createElement('li');
+        const userID = randomInt(1, 99999);
+        li.setAttribute('id', `${userID}`);                                       // Add "random" id to li el
+        li.classList.add('container__users-item');
+        li.insertAdjacentHTML('beforeend', `<small>PM </br>*</small>${username}<small>*<br/> POKE</small>`);
+        loggedUsers.append(li);
+        // Send pokeMessage();
+        document.getElementById(userID).addEventListener('click', () => {
+            if(document.getElementById(userID + 0) === null){
+                const pokeUser = document.createElement('div');
+                pokeUser.setAttribute('id', (userID + 0));
+                pokeUser.classList.add('container__users-poke');
+                const eachUser = {
+                    spanElement: userID + 1,
+                    inputElement: userID + 2,
+                    buttonElement: userID + 3
+                };
+                pokeUser.insertAdjacentHTML('beforeend',
+                                            `<image id="${eachUser.spanElement}" src="/static/close.png" class="container__users-poke-img">
+                                            <input id="${eachUser.inputElement}" class="container__users-poke-input" maxlength="40" name="poke-input">
+                                            <button id="${eachUser.buttonElement}" class="container__users-poke-btn">POKE!</button>`);
+                li.insertAdjacentElement('beforebegin', pokeUser);
+        }else{
+            return;
+        }
+        // Scroll to top();
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
+}
 
     // Socket events!
      socket.on('connect', () => {
@@ -50,7 +81,8 @@ document.addEventListener('DOMContentLoaded', () => {
         ///////////////////////////////////////////////////////
          ///////////// SEND MESSAGES FUNCTIONS
          ///////////////////////////////////////////////////////
-        text_from_area.onkeydown = function(e) {
+
+         text_from_area.onkeydown = function(e) {
             if (e.keyCode === 13) {
                 let user_message = text_from_area.value;
                 if (user_message != ''){
@@ -76,6 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
     });
+
     socket.on('post message', data => {                                         // Get a processed(annouced) data from socket.io and render it on page
         const li = document.createElement('li');
         li.classList.add('container__mesages-item');

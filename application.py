@@ -144,7 +144,8 @@ def register():
 def communicator(username):
     if request.method == "GET" or request.method == "POST":
         session_user = session["user"]
-        return render_template('communication_page.html', session_user=session_user, usersOnline2_list=usersOnline2_list)
+        return render_template('communication_page.html', session_user=session_user, usersOnline=usersOnline)
+    print(f"{usersOnline2_list}")
 
 #################### Socket.io for FLASK micro-framework ##############
 @socketio.on('hello user')
@@ -159,7 +160,25 @@ def connected(data):
     usersOnline2['sessionID'] = sessionID
     usersOnline2['randomID'] = randomID
 
+    #if usersOnline2 in usersOnline2_list:
+        #print(f"{name} refreshed the page...")
+    #else:
+    #    usersOnline2_list.append(usersOnline2)
+    #    print (f'{name} is added to the chat...')
     usersOnline2_list.append(usersOnline2)
+    print(usersOnline)
+    #if usersOnline2['sessionID'] is not usersOnline2_list:
+        #usersOnline2_list.append(usersOnline2)
+    #else:
+        #print(f"{usersOnline2['username']} reconnected to the chat...")
+
+
+    #for user in usersOnline2_list:
+        #if (user['username'] != usersOnline2['username']) or (len(usersOnline2_list) == 0):
+            #usersOnline2_list.append(usersOnline2)
+            #print(usersOnline2_list)
+        #else:
+            #print(f"{user['username']} refreshed the page...")
 
     socketio.emit('hello response', {"name" : name,
                                      "sessionID": sessionID,
