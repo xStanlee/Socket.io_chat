@@ -35,14 +35,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let json = data_storage.textContent.trim();
     json = JSON.parse(jsonCorecter(json));
-    console.log(typeof(json));
-    console.log(json);
-
-    const entries = Object.entries(json)
+    let entries = Object.entries(json);
+    // Set first element of array (username) to uppercase because of limited sorted algorithm
+    entries = entries.map(function(val){ return [val[0].toUpperCase(), val[1]] });
+    //entries = entries.sort(function(a,b){return a[0].tolowerCase().localeCompare(b[0].tolowerCase())});
+    console.log(entries);
+    entries = entries.sort();
     for(const [username,sessionID] of entries){
         console.log(`${username} have a session id equal this one === ${sessionID} and their random int will be ${randomInt(1, 99999)}`);
         const li = document.createElement('li');
-        const userID = randomInt(1, 99999);
+        let userID = randomInt(1, 99999);
+        userID = String(userID);
         li.setAttribute('id', `${userID}`);                                       // Add "random" id to li el
         li.classList.add('container__users-item');
         li.insertAdjacentHTML('beforeend', `<small>PM </br>*</small>${username}<small>*<br/> POKE</small>`);
@@ -53,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const pokeUser = document.createElement('div');
                 pokeUser.setAttribute('id', (userID + 0));
                 pokeUser.classList.add('container__users-poke');
+                console.log(pokeUser);
                 const eachUser = {
                     spanElement: userID + 1,
                     inputElement: userID + 2,
@@ -63,9 +67,30 @@ document.addEventListener('DOMContentLoaded', () => {
                                             <input id="${eachUser.inputElement}" class="container__users-poke-input" maxlength="40" name="poke-input">
                                             <button id="${eachUser.buttonElement}" class="container__users-poke-btn">POKE!</button>`);
                 li.insertAdjacentElement('beforebegin', pokeUser);
-        }else{
-            return;
-        }
+                // Pop up del();
+                document.getElementById(eachUser.spanElement).addEventListener('click', () => {
+                    document.getElementById(userID + 0).remove();
+                    });
+                     // Pop up send poke();
+                     ['keydown', 'click'].forEach(evt =>
+                        document
+                        .getElementById(eachUser.buttonElement)
+                        .addEventListener(evt, event => {
+                            if ((evt === 'keyup' && event.keyCode === 13) || evt === 'click'){
+                                const pokeMessage = document.getElementById(eachUser.inputElement).value;
+                                private_socket.emit('poke message', {
+                                    'username': username,
+                                    'sessionID': sessionID,
+                                    'pokeMessage': pokeMessage
+                                });
+                                pokeUser.parentNode.removeChild(pokeUser);
+                        }   else{
+                            return;
+                        }
+                    }), false);
+            }else{
+                return;
+            }
         // Scroll to top();
         chatMessages.scrollTop = chatMessages.scrollHeight;
     });
