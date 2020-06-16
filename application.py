@@ -208,5 +208,15 @@ def private_mess(data):
                    "username": username
     }, room=recipient_user_id)
 
+@socketio.on('disconnected')
+def disconnected(data):
+    username = data["username"]
+    current_time = now.strftime("%H:%M:%S")
+    print(username)
+    #loop through or if in extend that object...
+    emit("disconected-feedback", {"username": username,
+                                  "current_time": current_time
+    })
+    #emit new list of users
 if __name__ == "__main__":
     socketio.run(app)

@@ -92,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
         // Scroll to top();
+
         chatMessages.scrollTop = chatMessages.scrollHeight;
     });
 }
@@ -152,8 +153,10 @@ document.addEventListener('DOMContentLoaded', () => {
         li.classList.add('container__mesages-item-connected');
         li.insertAdjacentHTML("afterbegin", `***--${user.name} has connected!--***`)
         chatMessages.append(li);
-        //scroll down
-         chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // Scroll down
+
+        chatMessages.scrollTop = chatMessages.scrollHeight;
     });
 
     socket.on('hello response', user => {
@@ -215,9 +218,23 @@ document.addEventListener('DOMContentLoaded', () => {
         swal(`${message.username}`, `${message.message}`, "info");
     });
 
-    socket.on('send users', users  => {
-        console.log(users);
+    socket.on('disconected-feedback', diss => {
+        console.log(`At ${diss.current_time} ${diss.username} disconnected from server`);
     });
 });
+
+// Disconnected
+
+window.document.addEventListener("unload", () => {
+    socket.emit('disconnected', {
+        "username": "pussy",
+        "sessionID": "cat"
+    });
+});
+// Disconnect user
+/*
+window.addEventListener("unload", socket.emit('disconnected', () => {
+
+    })); */
 
 
