@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function randomInt(min, max) {
         return min + Math.floor((max - min) * Math.random());
     }
+    function sendInfo(url, name){
+        navigator.sendBeacon(url, name);
+    }
     // Connect to  websockets
 
     var socket = io.connect(location.protocol + '//' +                          // HTTP or HTTPS mostly protocols
@@ -224,13 +227,21 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Disconnected
+/*
+window.addEventListener('beforeunload', (url, name) => {
+    navigator.sendBeacon(url, data);
+}); */
 
-window.document.addEventListener("unload", () => {
+window.addEventListener("unload", ev => {
+    ev.preventDefault();
+    ev.returnValue =
+        'There\'s some trouble with emmiting data';
     socket.emit('disconnected', {
         "username": "pussy",
         "sessionID": "cat"
     });
 });
+
 // Disconnect user
 /*
 window.addEventListener("unload", socket.emit('disconnected', () => {
