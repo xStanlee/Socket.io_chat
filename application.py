@@ -147,7 +147,6 @@ def communicator(username):
         session_user = session["user"]
         return render_template('communication_page.html', session_user=session_user, usersOnline=usersOnline)
     print(f"{usersOnline2_list}")
-
 #################### Socket.io for FLASK micro-framework ##############
 @socketio.on('hello user')
 def connected(data):
@@ -207,7 +206,7 @@ def private_mess(data):
     username = session["user"]
     emit("poked", {"message": message,
                    "username": username
-    }, room=recipient_user_id)
+                    }, room=recipient_user_id)
 
 @socketio.on('disconnected')
 def disconnected(data):
@@ -217,7 +216,7 @@ def disconnected(data):
     #loop through or if in extend that object...
     emit("disconected-feedback", {"username": username,
                                   "current_time": current_time
-    })
+                                    })
     #emit new list of users
 if __name__ == "__main__":
     socketio.run(app)

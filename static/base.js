@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let json = data_storage.textContent.trim();
     json = JSON.parse(jsonCorecter(json));
     let entries = Object.entries(json);
-    // Set first element of array (username) to uppercase because of limited sorted algorithm
+    // Set first element of array (username) to uppercase because of limitt of sorted algorithm
     entries = entries.map(function(val){ return [val[0].toUpperCase(), val[1]] });
     //entries = entries.sort(function(a,b){return a[0].tolowerCase().localeCompare(b[0].tolowerCase())});
     console.log(entries);
@@ -220,11 +220,36 @@ document.addEventListener('DOMContentLoaded', () => {
     private_socket.on('poked',  message => {
         swal(`${message.username}`, `${message.message}`, "info");
     });
-
+    /*
+    ['beforeunload', 'unload'].forEach(el => {
+        window.addEventListener(el, () => {
+            if (el === 'beforeunload') {
+                el.preventDefault();
+                el.returnValue = ' ';
+        }else {
+            socket.emit('disconnected', {
+                "username": name,
+                "message": "cosTamCammel"
+            });
+        }
+    }); */
+    window.addEventListener('unload', () => {
+        //navigator.sendBeacon(`http://127.0.0.1:5000/`, `${name} wypierdolil z serwera`);
+        socket.emit('disconnected', {
+                                    "username": name,
+                                    "message": "cosTamCammel"
+        });
+    });
     socket.on('disconected-feedback', diss => {
         console.log(`At ${diss.current_time} ${diss.username} disconnected from server`);
     });
 });
+
+
+
+
+
+
 
 // Disconnected
 /*
@@ -232,16 +257,21 @@ window.addEventListener('beforeunload', (url, name) => {
     navigator.sendBeacon(url, data);
 }); */
 
-window.addEventListener("unload", ev => {
+
+/*
+window.addEventListener("beforeunload", ev => {
     ev.preventDefault();
-    ev.returnValue =
-        'There\'s some trouble with emmiting data';
-    socket.emit('disconnected', {
-        "username": "pussy",
-        "sessionID": "cat"
-    });
+    ev.returnValue = ' ';
 });
 
+window.addEventListener("unload", ev => {
+    socket.emit('disconnected', {
+                                    "username": "USER-1",
+                                    "sessionID": "SESSION123456789TRY"
+                                });
+});
+
+*/
 // Disconnect user
 /*
 window.addEventListener("unload", socket.emit('disconnected', () => {
