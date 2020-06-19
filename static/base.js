@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     ///////////////////////////////////////////////////////
     ///////////// REUSABLE FUNCTIONS ES 5+
-
     function jsonCorecter(data){
         data = data.replace(/"/g, '`');
         data = data.replace(/'/g, '"');
@@ -24,6 +23,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     function sendInfo(url, name){
         navigator.sendBeacon(url, name);
+    }
+    function emitGoodBye(name){
+        socket.emit('disconnected', {
+            "username": name,
+            "message": "disconnected from the server"
+        });
     }
     // Connect to  websockets
 
@@ -106,8 +111,17 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.emit('hello user', {
             'name': name
         });
-
-        ///////////////////////////////////////////////////////
+        /*
+        window.addEventListener('beforeunload', () => {
+                                                                                // Disconnected from channel
+            //navigator.sendBeacon(`http://127.0.0.1:5000/`, `${name} out z serwera`);
+            socket.emit('disconnected', {
+                                        "username": name,
+                                        "message": "cosTamCammel"
+            });
+        });
+        */
+         //////////////////////////////////////////////////////
          ///////////// SEND MESSAGES FUNCTIONS
          ///////////////////////////////////////////////////////
 
@@ -134,8 +148,8 @@ document.addEventListener('DOMContentLoaded', () => {
             text_from_area.value = '';
         }else{
             return;
-        }
-    };
+            }
+        };
     });
 
     socket.on('post message', data => {                                         // Get a processed(annouced) data from socket.io and render it on page
@@ -146,11 +160,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         li.insertAdjacentHTML("afterbegin", `${data.username}: ${data.user_message}  <small>${data.current_time}</small>`);  // Insert text to li element
         chatMessages.append(li);
+
         //scroll down
         chatMessages.scrollTop = chatMessages.scrollHeight;
     });
 
     socket.on('hello response', user => {
+
         // User connected info
         const li = document.createElement('li');
         li.classList.add('container__mesages-item-connected');
@@ -158,11 +174,11 @@ document.addEventListener('DOMContentLoaded', () => {
         chatMessages.append(li);
 
         // Scroll down
-
         chatMessages.scrollTop = chatMessages.scrollHeight;
     });
 
     socket.on('hello response', user => {
+
         // Connected users panel
         const user_li = document.createElement('li');
         const userID = user.randomID;
@@ -170,6 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
         user_li.classList.add('container__users-item');
         user_li.insertAdjacentHTML('beforeend', `<small>PM </br>*</small>${user.name}<small>*<br/> POKE</small>`);
         loggedUsers.append(user_li);
+
         // Pop-up input
         const individual_user = document.getElementById(userID);
         individual_user.addEventListener('click', () => {
@@ -187,6 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                             <input id="${eachUser.inputElement}" class="container__users-poke-input" maxlength="40" name="poke-input">
                                             <button id="${eachUser.buttonElement}" class="container__users-poke-btn">POKE!</button>`);
                 user_li.insertAdjacentElement('beforebegin', pokeUser);
+
                 // Pop up del();
                 document.getElementById(eachUser.spanElement).addEventListener('click', () => {
                     document.getElementById(user.randomID+0).remove();
@@ -212,70 +230,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     }else{
                         return;
                     }
-         //scroll down
+         //Scroll down
          chatMessages.scrollTop = chatMessages.scrollHeight;
         });
     });
 
+    //Poke message
     private_socket.on('poked',  message => {
         swal(`${message.username}`, `${message.message}`, "info");
     });
-    /*
-    ['beforeunload', 'unload'].forEach(el => {
-        window.addEventListener(el, () => {
-            if (el === 'beforeunload') {
-                el.preventDefault();
-                el.returnValue = ' ';
-        }else {
-            socket.emit('disconnected', {
-                "username": name,
-                "message": "cosTamCammel"
-            });
-        }
-    }); */
-    window.addEventListener('unload', () => {
-        //navigator.sendBeacon(`http://127.0.0.1:5000/`, `${name} wypierdolil z serwera`);
-        socket.emit('disconnected', {
-                                    "username": name,
-                                    "message": "cosTamCammel"
-        });
-    });
+
+    // Disconnected
+    window.onunload = emitGoodBye(name);
+
+    // Disconnected-feedback event
     socket.on('disconected-feedback', diss => {
-        console.log(`At ${diss.current_time} ${diss.username} disconnected from server`);
+        const li = document.createElement('li');
+        li.classList.add('container__mesages-item');
+        li.insertAdjacentHTML("afterbegin", `${diss.username} has been disconnected from your channel <small>${diss.current_time}</small>`);  // Insert text to li element
+        chatMessages.append(li);
     });
 });
-
-
-
-
-
-
-
-// Disconnected
-/*
-window.addEventListener('beforeunload', (url, name) => {
-    navigator.sendBeacon(url, data);
-}); */
-
-
-/*
-window.addEventListener("beforeunload", ev => {
-    ev.preventDefault();
-    ev.returnValue = ' ';
-});
-
-window.addEventListener("unload", ev => {
-    socket.emit('disconnected', {
-                                    "username": "USER-1",
-                                    "sessionID": "SESSION123456789TRY"
-                                });
-});
-
-*/
-// Disconnect user
-/*
-window.addEventListener("unload", socket.emit('disconnected', () => {
-
-    })); */
-
-

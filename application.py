@@ -211,8 +211,10 @@ def private_mess(data):
 @socketio.on('disconnected')
 def disconnected(data):
     username = data["username"]
+    now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print(username)
+    print(current_time)
     #loop through or if in extend that object...
     emit("disconected-feedback", {"username": username,
                                   "current_time": current_time
