@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         navigator.sendBeacon(url, name);
     }
     function emitGoodBye(name){
+        alert('henki');
         socket.emit('disconnected', {
             "username": name,
             "message": "disconnected from the server"
@@ -241,8 +242,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Disconnected
-    window.onunload = emitGoodBye(name);
+    // WORKING
+    //window.onunload = emitGoodBye(name);
 
+
+    // Not working or hopely works
+    window.addEventListener('beforeunload', (event) => {
+        // Cancel the event as stated by the standard.
+        event.preventDefault();
+        // Chrome requires returnValue to be set.
+        event.returnValue = '';
+        // emiting data
+        emitGoodBye(name);
+      });
     // Disconnected-feedback event
     socket.on('disconected-feedback', diss => {
         const li = document.createElement('li');

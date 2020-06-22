@@ -218,7 +218,7 @@ def disconnected(data):
     #loop through or if in extend that object...
     emit("disconected-feedback", {"username": username,
                                   "current_time": current_time
-                                    })
+                                    }, broadcast=True)
     #emit new list of users
 if __name__ == "__main__":
     socketio.run(app)
