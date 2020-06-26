@@ -214,7 +214,7 @@ def disconnected(data):
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print(username)
-    print(current_time)
+    print(usersOnline)
     #loop through or if in extend that object...
     emit("disconected-feedback", {"username": username,
                                   "current_time": current_time

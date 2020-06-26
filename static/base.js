@@ -10,6 +10,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatMessages = document.querySelector('.container__messages-block');
     let text_from_area = document.getElementById('container__textarea');
 
+
+    let listOfUsers = [];
+
+    class User{
+        constructor(username, id){
+            this.username = username;
+            this.id = id;
+        }
+    };
+
     ///////////////////////////////////////////////////////
     ///////////// REUSABLE FUNCTIONS ES 5+
     function jsonCorecter(data){
@@ -25,10 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
         navigator.sendBeacon(url, name);
     }
     function emitGoodBye(name){
-        alert('henki');
         socket.emit('disconnected', {
             "username": name,
-            "message": "disconnected from the server"
+            "pokeID": "123123123"
         });
     }
     // Connect to  websockets
@@ -42,6 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                     location.port + '/' + 'private');           // New socket for priv messages from dif users
     // Render already loggedUsers
 
+    console.log((loggedUsers));
+
     let json = data_storage.textContent.trim();
     json = JSON.parse(jsonCorecter(json));
     let entries = Object.entries(json);
@@ -50,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //entries = entries.sort(function(a,b){return a[0].tolowerCase().localeCompare(b[0].tolowerCase())});
     console.log(entries);
     entries = entries.sort();
-    for(const [username,sessionID] of entries){
+    for(const [username,sessionID] of entries)  {
         console.log(`${username} have a session id equal this one === ${sessionID} and their random int will be ${randomInt(1, 99999)}`);
         const li = document.createElement('li');
         let userID = randomInt(1, 99999);
@@ -257,9 +268,10 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     // Disconnected-feedback event
     socket.on('disconected-feedback', diss => {
+        // Send disconnected message
         const li = document.createElement('li');
-        li.classList.add('container__mesages-item');
-        li.insertAdjacentHTML("afterbegin", `${diss.username} has been disconnected from your channel <small>${diss.current_time}</small>`);  // Insert text to li element
+        li.classList.add('container__mesages-item-connected');
+        li.insertAdjacentHTML("afterbegin", `***--${diss.username} disconnected from channel!--***`)  // Insert text to li element
         chatMessages.append(li);
     });
 });
