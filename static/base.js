@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const data_storage = document.querySelector('.data_storage')
     const btn_send = document.querySelector('.container__textarea-btn');
     const chatMessages = document.querySelector('.container__messages-block');
+    let sortedMessages = Array.from(document.getElementsByClassName('checkerList'));
     let text_from_area = document.getElementById('container__textarea');
 
 
@@ -50,17 +51,16 @@ document.addEventListener('DOMContentLoaded', () => {
                                     document.domain + ':' +
                                     location.port + '/' + 'private');           // New socket for priv messages from dif users
     // Render already loggedUsers
-
     console.log((loggedUsers));
 
     let json = data_storage.textContent.trim();
     json = JSON.parse(jsonCorecter(json));
     let entries = Object.entries(json);
+
     // Set first element of array (username) to uppercase because of limitt of sorted algorithm
     entries = entries.map(function(val){ return [val[0].toUpperCase(), val[1]] });
-    //entries = entries.sort(function(a,b){return a[0].tolowerCase().localeCompare(b[0].tolowerCase())});
-    console.log(entries);
     entries = entries.sort();
+
     for(const [username,sessionID] of entries)  {
         console.log(`${username} have a session id equal this one === ${sessionID} and their random int will be ${randomInt(1, 99999)}`);
         const li = document.createElement('li');
@@ -114,6 +114,18 @@ document.addEventListener('DOMContentLoaded', () => {
         chatMessages.scrollTop = chatMessages.scrollHeight;
     });
 }
+    // Render old messages with sorted styles();
+
+    for (let i = 0; i < sortedMessages.length; i++) {
+        let transitionSelf = sortedMessages[i].textContent;                    // Sort user message in UI adding class.
+        transitionSelf = transitionSelf.substring(0, transitionSelf.indexOf(':'));
+        transitionSelf = transitionSelf.trim();
+        if (transitionSelf === name){
+            sortedMessages[i].classList.add('container__mesages-item--right');
+        } else { console.log ('sumtink wen rong!');}
+    }
+
+
 
     // Socket events!
      socket.on('connect', () => {
@@ -121,16 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.emit('hello user', {
             'name': name
         });
-        /*
-        window.addEventListener('beforeunload', () => {
-                                                                                // Disconnected from channel
-            //navigator.sendBeacon(`http://127.0.0.1:5000/`, `${name} out z serwera`);
-            socket.emit('disconnected', {
-                                        "username": name,
-                                        "message": "cosTamCammel"
-            });
-        });
-        */
+
          //////////////////////////////////////////////////////
          ///////////// SEND MESSAGES FUNCTIONS
          ///////////////////////////////////////////////////////
@@ -263,8 +266,8 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.on('disconected-feedback', diss => {
         // Send disconnected message
         const li = document.createElement('li');
-        li.classList.add('container__mesages-item-connected');
-        li.insertAdjacentHTML("afterbegin", `***--${diss.username} disconnected from channel!--***`)  // Insert text to li element
+        li.classList.add('container__mesages-item-disconected');
+        li.insertAdjacentHTML("afterbegin", `###  ${diss.username} disconnected from channel  ###`)  // Insert text to li element
         chatMessages.append(li);
 
         // remove from UI list[];
