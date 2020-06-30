@@ -54,9 +54,9 @@ Session(app)
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
+
 usersOnline = {}
-usersOnline2 = {}
-usersOnline2_list = []
+usersMessages = []
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -145,7 +145,10 @@ def register():
 def communicator(username):
     if request.method == "GET" or request.method == "POST":
         session_user = session["user"]
-        return render_template('communication_page.html', session_user=session_user, usersOnline=usersOnline)
+        ###########
+        #DATABASE b
+        ###########
+        return render_template('communication_page.html', session_user=session_user, usersOnline=usersOnline, usersMessages=usersMessages)
     print(f"{usersOnline2_list}")
 #################### Socket.io for FLASK micro-framework ##############
 @socketio.on('hello user')
@@ -155,30 +158,6 @@ def connected(data):
     randomID = str(randint(1, 999999))
     usersOnline[name] = sessionID
     usersOnline.update({name : sessionID})
-
-    usersOnline2['username'] = name
-    usersOnline2['sessionID'] = sessionID
-    usersOnline2['randomID'] = randomID
-
-    #if usersOnline2 in usersOnline2_list:
-        #print(f"{name} refreshed the page...")
-    #else:
-    #    usersOnline2_list.append(usersOnline2)
-    #    print (f'{name} is added to the chat...')
-    usersOnline2_list.append(usersOnline2)
-    print(usersOnline)
-    #if usersOnline2['sessionID'] is not usersOnline2_list:
-        #usersOnline2_list.append(usersOnline2)
-    #else:
-        #print(f"{usersOnline2['username']} reconnected to the chat...")
-
-
-    #for user in usersOnline2_list:
-        #if (user['username'] != usersOnline2['username']) or (len(usersOnline2_list) == 0):
-            #usersOnline2_list.append(usersOnline2)
-            #print(usersOnline2_list)
-        #else:
-            #print(f"{user['username']} refreshed the page...")
 
     socketio.emit('hello response', {"name" : name,
                                      "sessionID": sessionID,
@@ -198,6 +177,15 @@ def mess(data):
                           "current_time": current_time,
                           "username": username
     }, broadcast=True)
+    forNewUser = {'name': username, 'user_message': user_message, 'current_time': current_time}
+    if len(usersMessages) < 100:
+        usersMessages.append(forNewUser)
+    elif len(usersMessages) == 100:
+        usersMessages.pop(0)
+        usersMessages.append(forNewUser)
+    else:
+        pass
+    print(usersMessages)
 
 @socketio.on('poke message', namespace='/private')
 def private_mess(data):
@@ -211,14 +199,13 @@ def private_mess(data):
 @socketio.on('disconnected')
 def disconnected(data):
     username = data["username"]
-    now = datetime.now()
-    current_time = now.strftime("%H:%M:%S")
-    print(username)
-    print(current_time)
-    #loop through or if in extend that object...
+    sessionID = usersOnline[username]
+    del usersOnline[username]
+
+    print(usersOnline)
     emit("disconected-feedback", {"username": username,
-                                  "current_time": current_time
-                                    })
+                                  "sessionID": sessionID
+                                    }, broadcast=True)
     #emit new list of users
 if __name__ == "__main__":
     socketio.run(app)
