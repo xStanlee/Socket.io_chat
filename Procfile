@@ -1,1 +1,1 @@
-app : web gunicorn port 0.0.0.0$PORT have to check it
+web:gunicorn application:app
