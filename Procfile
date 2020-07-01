@@ -1,1 +1,1 @@
-web:gunicorn app:application.py runserver 0.0.0.0:$PORT --preload
+web: gunicorn app: application.py runserver 0.0.0.0:$PORT --preload
