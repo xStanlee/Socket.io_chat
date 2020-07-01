@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const data_storage = document.querySelector('.data_storage')
     const btn_send = document.querySelector('.container__textarea-btn');
     const chatMessages = document.querySelector('.container__messages-block');
+    let sortedMessages = Array.from(document.getElementsByClassName('checkerList'));
     let text_from_area = document.getElementById('container__textarea');
 
 
@@ -34,10 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function sendInfo(url, name){
         navigator.sendBeacon(url, name);
     }
-    function emitGoodBye(name){
+    function emitGoodBye(name, id){
         socket.emit('disconnected', {
             "username": name,
-            "pokeID": "123123123"
+            "pokeID": 'notThisWay'
         });
     }
     // Connect to  websockets
@@ -50,37 +51,34 @@ document.addEventListener('DOMContentLoaded', () => {
                                     document.domain + ':' +
                                     location.port + '/' + 'private');           // New socket for priv messages from dif users
     // Render already loggedUsers
-
     console.log((loggedUsers));
 
     let json = data_storage.textContent.trim();
     json = JSON.parse(jsonCorecter(json));
     let entries = Object.entries(json);
+
     // Set first element of array (username) to uppercase because of limitt of sorted algorithm
     entries = entries.map(function(val){ return [val[0].toUpperCase(), val[1]] });
-    //entries = entries.sort(function(a,b){return a[0].tolowerCase().localeCompare(b[0].tolowerCase())});
-    console.log(entries);
     entries = entries.sort();
+
     for(const [username,sessionID] of entries)  {
         console.log(`${username} have a session id equal this one === ${sessionID} and their random int will be ${randomInt(1, 99999)}`);
         const li = document.createElement('li');
-        let userID = randomInt(1, 99999);
-        userID = String(userID);
-        li.setAttribute('id', `${userID}`);                                       // Add "random" id to li el
+        li.setAttribute('id', `${sessionID}`);                                       // Add "random" id to li el
         li.classList.add('container__users-item');
         li.insertAdjacentHTML('beforeend', `<small>PM </br>*</small>${username}<small>*<br/> POKE</small>`);
         loggedUsers.append(li);
         // Send pokeMessage();
-        document.getElementById(userID).addEventListener('click', () => {
-            if(document.getElementById(userID + 0) === null){
+        document.getElementById(sessionID).addEventListener('click', () => {
+            if(document.getElementById(sessionID + 0) === null){
                 const pokeUser = document.createElement('div');
-                pokeUser.setAttribute('id', (userID + 0));
+                pokeUser.setAttribute('id', (sessionID + 0));
                 pokeUser.classList.add('container__users-poke');
                 console.log(pokeUser);
                 const eachUser = {
-                    spanElement: userID + 1,
-                    inputElement: userID + 2,
-                    buttonElement: userID + 3
+                    spanElement: sessionID + 1,
+                    inputElement: sessionID + 2,
+                    buttonElement: sessionID + 3
                 };
                 pokeUser.insertAdjacentHTML('beforeend',
                                             `<image id="${eachUser.spanElement}" src="/static/close.png" class="container__users-poke-img">
@@ -89,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 li.insertAdjacentElement('beforebegin', pokeUser);
                 // Pop up del();
                 document.getElementById(eachUser.spanElement).addEventListener('click', () => {
-                    document.getElementById(userID + 0).remove();
+                    document.getElementById(sessionID + 0).remove();
                     });
                      // Pop up send poke();
                      ['keydown', 'click'].forEach(evt =>
@@ -116,6 +114,18 @@ document.addEventListener('DOMContentLoaded', () => {
         chatMessages.scrollTop = chatMessages.scrollHeight;
     });
 }
+    // Render old messages with sorted styles();
+
+    for (let i = 0; i < sortedMessages.length; i++) {
+        let transitionSelf = sortedMessages[i].textContent;                    // Sort user message in UI adding class.
+        transitionSelf = transitionSelf.substring(0, transitionSelf.indexOf(':'));
+        transitionSelf = transitionSelf.trim();
+        if (transitionSelf === name){
+            sortedMessages[i].classList.add('container__mesages-item--right');
+        } else { console.log ('sumtink wen rong!');}
+    }
+
+
 
     // Socket events!
      socket.on('connect', () => {
@@ -123,16 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.emit('hello user', {
             'name': name
         });
-        /*
-        window.addEventListener('beforeunload', () => {
-                                                                                // Disconnected from channel
-            //navigator.sendBeacon(`http://127.0.0.1:5000/`, `${name} out z serwera`);
-            socket.emit('disconnected', {
-                                        "username": name,
-                                        "message": "cosTamCammel"
-            });
-        });
-        */
+
          //////////////////////////////////////////////////////
          ///////////// SEND MESSAGES FUNCTIONS
          ///////////////////////////////////////////////////////
@@ -193,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Connected users panel
         const user_li = document.createElement('li');
-        const userID = user.randomID;
+        const userID = user.sessionID;
         user_li.setAttribute('id', `${userID}`);                                       // Add "random" id to li el
         user_li.classList.add('container__users-item');
         user_li.insertAdjacentHTML('beforeend', `<small>PM </br>*</small>${user.name}<small>*<br/> POKE</small>`);
@@ -202,14 +203,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // Pop-up input
         const individual_user = document.getElementById(userID);
         individual_user.addEventListener('click', () => {
-            if(document.getElementById(user.randomID+0) === null){
+            if(document.getElementById(user.sessionID+0) === null){
                 const pokeUser = document.createElement('div');
-                pokeUser.setAttribute('id', (user.randomID+0));
+                pokeUser.setAttribute('id', (user.sessionID+0));
                 pokeUser.classList.add('container__users-poke');
                 const eachUser = {
-                    spanElement: user.randomID + 1,
-                    inputElement: user.randomID + 2,
-                    buttonElement: user.randomID + 3
+                    spanElement: user.sessionID + 1,
+                    inputElement: user.sessionID + 2,
+                    buttonElement: user.sessionID + 3
                 };
                 pokeUser.insertAdjacentHTML('beforeend',
                                             `<image id="${eachUser.spanElement}" src="/static/close.png" class="container__users-poke-img">
@@ -219,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Pop up del();
                 document.getElementById(eachUser.spanElement).addEventListener('click', () => {
-                    document.getElementById(user.randomID+0).remove();
+                    document.getElementById(user.sessionID+0).remove();
                     });
 
                     // Pop up send poke();
@@ -252,11 +253,6 @@ document.addEventListener('DOMContentLoaded', () => {
         swal(`${message.username}`, `${message.message}`, "info");
     });
 
-    // Disconnected
-    // WORKING
-    //window.onunload = emitGoodBye(name);
-
-
     // Not working or hopely works
     window.addEventListener('beforeunload', (event) => {
         // Cancel the event as stated by the standard.
@@ -270,8 +266,12 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.on('disconected-feedback', diss => {
         // Send disconnected message
         const li = document.createElement('li');
-        li.classList.add('container__mesages-item-connected');
-        li.insertAdjacentHTML("afterbegin", `***--${diss.username} disconnected from channel!--***`)  // Insert text to li element
+        li.classList.add('container__mesages-item-disconected');
+        li.insertAdjacentHTML("afterbegin", `###  ${diss.username} disconnected from channel  ###`)  // Insert text to li element
         chatMessages.append(li);
+
+        // remove from UI list[];
+        const el = document.getElementById(diss.sessionID);
+        loggedUsers.removeChild(el);
     });
 });
