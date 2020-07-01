@@ -43,7 +43,6 @@ socketio = SocketIO(app)
 # Config engine SQLAlchemy with env and init
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-db.init_app(app)
 
 #Configure session
 app.config["SESSION_PERMANENT"] = False
